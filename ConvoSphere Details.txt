@@ -1,0 +1,5 @@
+ConvoSphere Details
+
+mongoDB user name : zeno01062025_db_user
+mongoDB password : qiHCDDKPH4P5ml8z
+connection string : mongodb+srv://<db_username>:qiHCDDKPH4P5ml8z@cluster0.hkmntkn.mongodb.net/?appName=Cluster0
