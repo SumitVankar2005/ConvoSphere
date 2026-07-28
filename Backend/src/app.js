@@ -1,4 +1,4 @@
-import express from "express";
+import express, { urlencoded } from "express";
 import {createServer} from "node:http";
 
 import { Server } from "socket.io";
@@ -8,23 +8,32 @@ import mongoose from "mongoose";
 
 import cors from "cors";
 
+import userRoutes from "./routes/users.routes.js";
+
 const app = express();
 const server = createServer(app);
 const io = connectToSocket(server);
 app.set("port",(process.env.PORT || 8000));
 
-app.get("/home",(req,res) => {
-    res.send({"hello":"World"});
-});
+
+app.use(cors());
+app.use(express.json({limit: "40kb"}));
+app.use(express.urlencoded({limit : "40kb",extended: true}));
+
+app.use("/api/v1/user",userRoutes);
+
 
 const start = async () => {
-app.set("mongo_user")
-    const connectionDb = await mongoose.connect("mongodb+srv://zeno01062025_db_user:qiHCDDKPH4P5ml8z@cluster0.hkmntkn.mongodb.net/");
+    try{
+        const connectionDb = await mongoose.connect("mongodb+srv://zeno01062025_db_user:159159@cluster0.kmasret.mongodb.net/");
+        console.log(`Mongo db connected host: ${connectionDb.connection.host}`);
 
-    console.log(`Mongo db connected host: ${connectionDb.connection.host}`)
-    server.listen(app.get("port"),() => {
+        server.listen(app.get("port"),() => {
         console.log("Listening to port no : 8000");
     });
+    }catch(e){
+        console.log("error:",e);
+    }
 }
 
 start();
