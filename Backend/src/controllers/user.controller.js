@@ -27,7 +27,7 @@ const login = async (req,res) => {
 
             return res.status(httpStatus.OK).json({token : token,message: "User logged in"});
         }else{
-            return res.status(401).json({ message: "Invalid Credentials" });
+            return res.status(httpStatus.UNAUTHORIZED).json({ message: "Invalid Credentials" });
         }
     } catch(e){
         return res.status(500).json({message : `SOMETHING WENT WRONG ${e}`});
