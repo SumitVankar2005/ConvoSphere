@@ -2,3 +2,5 @@ ConvoSphere Details
 
 mongoDB user name : zeno01062025_db_user
 mongoDB password : 159159
+
+stun servers used -> when ever your device is connected to network then while making connection with other devices you got a public stun server which the cheapest server and you can use any stun server their a list of free servers.

@@ -200,13 +200,11 @@ export default function VideoMeetComponent() {
             try {
                 let tracks = localVideoref.current.srcObject.getTracks()
                 tracks.forEach(track => track.stop())
-            } catch (e) { }
+            } catch (e) {
+                console.log(e);
+            }
         }
     }
-
-
-
-
 
     let getDislayMediaSuccess = (stream) => {
         console.log("HERE")
@@ -304,14 +302,14 @@ export default function VideoMeetComponent() {
                         console.log("BEFORE:", videoRef.current);
                         console.log("FINDING ID: ", socketListId);
 
-                        let videoExists = videoRef.current.find(video => video.socketId === socketListId);
+                        let videoExists = videoRef.current.find((video) => video.socketId === socketListId);
 
                         if (videoExists) {
                             console.log("FOUND EXISTING");
 
                             // Update the stream of the existing video
-                            setVideos(videos => {
-                                const updatedVideos = videos.map(video =>
+                            setVideos((videos) => {
+                                const updatedVideos = videos.map((video) =>
                                     video.socketId === socketListId ? { ...video, stream: event.stream } : video
                                 );
                                 videoRef.current = updatedVideos;
@@ -327,7 +325,7 @@ export default function VideoMeetComponent() {
                                 playsinline: true
                             };
 
-                            setVideos(videos => {
+                            setVideos((videos) => {
                                 const updatedVideos = [...videos, newVideo];
                                 videoRef.current = updatedVideos;
                                 return updatedVideos;
