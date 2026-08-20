@@ -68,7 +68,7 @@ export default function VideoMeetComponent() {
         console.log("HELLO")
         getPermissions();
 
-    })
+    },[])
 
     let getDislayMedia = () => {
         if (screen) {
@@ -120,19 +120,10 @@ export default function VideoMeetComponent() {
             console.log(error);
         }
     };
-
-    useEffect(() => {
-        if (video !== undefined && audio !== undefined) {
-            getUserMedia();
-            console.log("SET STATE HAS ", video, audio);
-
-        }
-
-
-    }, [video, audio])
     let getMedia = () => {
         setVideo(videoAvailable);
         setAudio(audioAvailable);
+        getUserMedia();
         connectToSocketServer();
 
     }
@@ -151,7 +142,9 @@ export default function VideoMeetComponent() {
         for (let id in connections) {
             if (id === socketIdRef.current) continue
 
-            connections[id].addStream(window.localStream)
+            window.localStream.getTracks().forEach(track => {
+                connections[id].addTrack(track, window.localStream)
+            });
 
             connections[id].createOffer().then((description) => {
                 console.log(description)
@@ -312,7 +305,7 @@ export default function VideoMeetComponent() {
                             // Update the stream of the existing video
                             setVideos(videos => {
                                 const updatedVideos = videos.map(video =>
-                                    video.socketId === socketListId ? { ...video, stream: event.stream } : video
+                                    video.socketId === socketListId ? { ...video, stream: event.stream[0] } : video
                                 );
                                 videoRef.current = updatedVideos;
                                 return updatedVideos;
@@ -322,7 +315,7 @@ export default function VideoMeetComponent() {
                             console.log("CREATING NEW");
                             let newVideo = {
                                 socketId: socketListId,
-                                stream: event.stream,
+                                stream: event.stream[0],
                                 autoplay: true,
                                 playsinline: true
                             };
@@ -383,11 +376,23 @@ export default function VideoMeetComponent() {
     }
 
     let handleVideo = () => {
-        setVideo(!video);
+        const newState = !video;
+        setVideo(newState);
+        if(window.localStream){
+            window.localStream.getVideoTracks().forEach(track => {
+                track.enabled = newState;
+            });
+        }
         // getUserMedia();
     }
     let handleAudio = () => {
-        setAudio(!audio)
+        const newState = !audio;
+        setAudio(newState);
+        if(window.localStream){
+            window.localStream.getAudioTracks().forEach(track => {
+                track.enabled = newState;
+            });
+        }
         // getUserMedia();
     }
 
