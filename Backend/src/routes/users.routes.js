@@ -5,7 +5,7 @@ const router = Router();
 
 router.route("/login").post(login);
 router.route("/register").post(register);
-router.route("/add_to_activities");
-router.route("/get_all_activities");
+router.route("/add_to_activities").post(addToHistory);
+router.route("/get_all_activities").get(getUserHistory);
 
 export default router;
