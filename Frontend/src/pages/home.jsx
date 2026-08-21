@@ -12,11 +12,24 @@ function HomeComponent() {
     let navigate = useNavigate();
     const [meetingCode, setMeetingCode] = useState("");
 
+    const generateMeetingCode = () => {
+        // e.g. "a1b2c3-x9y8z7" - random, short, URL-safe
+        const part = () => Math.random().toString(36).substring(2, 8);
+        return `${part()}-${part()}`;
+    }
 
     const {addToUserHistory} = useContext(AuthContext);
+
     let handleJoinVideoCall = async () => {
+        if(!meetingCode) return;
         await addToUserHistory(meetingCode)
         navigate(`/${meetingCode}`)
+    }
+
+    let handleCreateMeeting = async () => {
+        const newCode = generateMeetingCode();
+        await addToUserHistory(newCode)
+        navigate(`/${newCode}`)
     }
 
     return (
@@ -60,6 +73,8 @@ function HomeComponent() {
 
                             <TextField onChange={e => setMeetingCode(e.target.value)} id="outlined-basic" label="Meeting Code" variant="outlined" />
                             <Button onClick={handleJoinVideoCall} variant='contained'>Join</Button>
+
+                            <Button onClick={handleCreateMeeting} variant='contained'>Create Video Call</Button>
 
                         </div>
                     </div>

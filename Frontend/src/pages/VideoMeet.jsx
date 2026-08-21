@@ -293,7 +293,7 @@ export default function VideoMeetComponent() {
                     }
 
                     // Wait for their video stream
-                    connections[socketListId].onaddstream = (event) => {
+                    connections[socketListId].ontrack = (event) => {
                         console.log("BEFORE:", videoRef.current);
                         console.log("FINDING ID: ", socketListId);
 
@@ -331,11 +331,11 @@ export default function VideoMeetComponent() {
 
                     // Add the local video stream
                     if (window.localStream !== undefined && window.localStream !== null) {
-                        connections[socketListId].addStream(window.localStream)
+                        connections[socketListId].addTrack(window.localStream)
                     } else {
                         let blackSilence = (...args) => new MediaStream([black(...args), silence()])
                         window.localStream = blackSilence()
-                        connections[socketListId].addStream(window.localStream)
+                        connections[socketListId].addTrack(window.localStream)
                     }
                 })
 
